@@ -1,9 +1,16 @@
 from textnode import TextNode, TextType
+from htmlnode import HTMLNode
 
 def main():
-    dummy = TextNode('Anchor text', TextType.LINK, 'https://www.boot.dev')
+    textnode = TextNode('Anchor text', TextType.LINK, 'https://www.boot.dev')
 
-    print(dummy)
+    htmlnode = HTMLNode('p', 'Hello world!', None, {"href": "https://www.boot.dev"})
+
+    print(textnode)
+
+    print(htmlnode)
+
+    print(htmlnode.props_to_html())
 
 if __name__ == "__main__":
     main()

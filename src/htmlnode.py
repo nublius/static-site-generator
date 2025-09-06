@@ -13,5 +13,10 @@ class HTMLNode:
             return ""
         return " " + " ".join(f'{k}="{v}"' for k, v in self.props.items())
 
+    def __eq__(self, other):
+        if not isinstance(other, HTMLNode):
+            return False
+        return (self.tag, self.value, self.children, self.props) == (other.tag, other.value, other.children, other.props)
+
     def __repr__(self):
         return f"HTMLNODE({self.tag}, {self.value}, {self.children}, {self.props})"
