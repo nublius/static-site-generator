@@ -11,7 +11,8 @@ class HTMLNode:
     def props_to_html(self):
         if not self.props:
             return ""
-        return " " + " ".join(f'{k}="{v}"' for k, v in self.props.items())
+        parts = [f'{k}="{self.props[k]}"' for k in sorted(self.props)]
+        return " " + " ".join(parts)
 
     def __eq__(self, other):
         if not isinstance(other, HTMLNode):
