@@ -9,3 +9,6 @@ class ParentNode(HTMLNode):
             raise ValueError("ParentNode must have a tag")
         if self.children == None:
             raise ValueError("ParentNode must have children")
+        
+        inner = "".join(child.to_html() for child in self.children)
+        return (f"<{self.tag}>{inner}</{self.tag}>")
