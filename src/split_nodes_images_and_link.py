@@ -11,7 +11,7 @@ def split_nodes_image(old_nodes):
         
         else:
             new_parts = []
-            images = extract_markdown_images(old_node)
+            images = extract_markdown_images(old_node.text)
             if not images:
                 new_nodes.append(old_node)
                 continue
