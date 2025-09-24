@@ -10,8 +10,38 @@ def markdown_to_html_node(markdown):
     for block in split_markdown:
         blocktype = block_to_block_type(block)
         
-
 def text_to_children(text):
     textnodes = text_to_textnodes(text)
     return [text_node_to_html_node(tn) for tn in textnodes]
+
+def parse_heading(line):
+    i = 0
+    while i < len(line) and line[i] == "#":
+        i += 1
+    # i is count of '#'
+    if i == 0 or i > 6:
+        return None, line # not a heading
+    if i < len(line) and line[i] == " ":
+        return i, line[i + 1:]
+    return None, line 
+
+def parse_quote(block):
+    lines = block.split("\n")
+    new_lines = []
+    for line in lines:
+        if line.startswith("> "):
+            new_lines.append(line[2:])
+        elif line.startswith(">"):
+            new_lines.append(line[1:])
+        else:
+            new_lines.append(line)
+    return "\n".join(new_lines)
+
+def trim_block_markers(block, blocktype):
+    match blocktype:
+        case BlockType.HEADING:
+            # returns count of #, text
+            return parse_heading(block)
+        case BlockType.QUOTE:
+
 
