@@ -50,7 +50,7 @@ def parse_unordered_list(block):
             new_lines.append(line[1:])
         else:
             new_lines.append(line)
-    return "\n".join(new_lines)
+    return new_lines
 
 def parse_ordered_list(block):
     lines = block.split("\n")
@@ -60,19 +60,10 @@ def parse_ordered_list(block):
             new_lines.append(strip_ordered_marker(line))
         else:
             new_lines.append(line)
-    return "\n".join(new_lines)
+    return new_lines
 
 def is_ordered_item(line):
     return bool(OL_MARKER.match(line))
 
 def strip_ordered_marker(line):
     return OL_MARKER.sub("", line, count=1)
-
-def trim_block_markers(block, blocktype):
-    match blocktype:
-        case BlockType.HEADING:
-            # returns count of #, text
-            return parse_heading(block)
-        case BlockType.QUOTE:
-
-
