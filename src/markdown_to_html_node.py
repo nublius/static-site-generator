@@ -33,7 +33,32 @@ def markdown_to_html_node(markdown):
                 raw = parse_code(block)
                 code_child = text_node_to_html_node(TextNode(raw, TextType.TEXT))
                 children.append(HTMLNode("pre", children=[HTMLNode("code", children=[code_child])]))
+            case BlockType.QUOTE:
+                cleaned = parse_quote(block)
+                kids = text_to_children(cleaned)
+                children.append(HTMLNode("blockquote", children=kids))
+            case BlockType.UNORDERED_LIST:
+                items = parse_unordered_list(block)
+                li_nodes = []
+                for it in items:
+                    if not it.strip():
+                        continue
+                    li_children = text_to_children(it)
+                    li_nodes.append(HTMLNode("li", children=li_children))
+                ul_node = HTMLNode("ul", children=li_nodes)
+                children.append(ul_node)
+            case BlockType.ORDERED_LIST:
+                items = parse_ordered_list(block)
+                li_nodes = []
+                for it in items:
+                    if not it.strip():
+                        continue
+                    li_children = text_to_children(it)
+                    li_nodes.append(HTMLNode("li", children=li_children))
+                ul_node = HTMLNode("ol", children=li_nodes)
+                children.append(ul_node)
 
+    return HTMLNode('div', children=children)
                 
         
 def text_to_children(text):
