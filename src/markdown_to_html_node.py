@@ -92,6 +92,13 @@ def parse_quote(block):
             new_lines.append(line)
     return "\n".join(new_lines)
 
+def dedent_lines(lines):
+    non_empty = [ln for ln in lines if ln.strip() != ""]
+    if not non_empty:
+        return lines
+    min_indent = min(len(ln) - len(ln.strip(" ")) for ln in non_empty)
+    return [ln[min_indent:] if len(ln) >= min_indent else ln for ln in lines]
+
 def parse_code(block):
     lines = block.split("\n")
     start = 0
@@ -103,14 +110,14 @@ def parse_code(block):
     if start > end:
         return ""
 
-    first = lines[start].lstrip()
-    last = lines[end].lstrip()
+    first = lines[start]
+    last = lines[end]
 
-    if not first.startswith("```") or not last.startswith("```"):
+    if not first.lstrip().startswith("```") or not last.lstrip().startswith("```"):
         return "\n".join(lines[start:end+1])
-
     inner = lines[start+1:end]
-    return "\n".join(inner)
+    inner = dedent_lines(inner)
+    return "\n".join(inner) + "\n"
 
 def parse_unordered_list(block):
     lines = block.split("\n")
