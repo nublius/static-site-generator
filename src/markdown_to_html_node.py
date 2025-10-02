@@ -70,14 +70,15 @@ def parse_paragraph(block):
     return " ".join(ln.strip() for ln in lines if ln.strip())
 
 def parse_heading(line):
+    s = line.lstrip()
     i = 0
-    while i < len(line) and line[i] == "#":
+    while i < len(s) and s[i] == "#":
         i += 1
     # i is count of '#'
     if i == 0 or i > 6:
         return None, line # not a heading
-    if i < len(line) and line[i] == " ":
-        return i, line[i + 1:]
+    if i < len(s) and s[i] == " ":
+        return i, s[i + 1:].strip()
     return None, line 
 
 def parse_quote(block):
