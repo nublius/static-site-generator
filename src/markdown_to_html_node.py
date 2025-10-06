@@ -133,14 +133,15 @@ def parse_unordered_list(block):
     return items
 
 def parse_ordered_list(block):
-    lines = block.split("\n")
-    new_lines = []
-    for line in lines:
-        if is_ordered_item(line):
-            new_lines.append(strip_ordered_marker(line))
-        else:
-            new_lines.append(line)
-    return new_lines
+    items = []
+    for line in block.split("\n"):
+        s = line.lstrip()
+        m = re.match(r"^\d+\.\s(.*)$", s)
+        if m:
+            items.append(m.group(1))
+        elif s.strip():
+            items.append(s)
+    return items
 
 def is_ordered_item(line):
     return bool(OL_MARKER.match(line))

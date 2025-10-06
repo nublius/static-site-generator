@@ -23,7 +23,7 @@ def block_to_block_type(block):
         else:
             nums = []
             for line in lines:
-                m = re.match(r"^(\d+)\. ", line)
+                m = re.match(r"^(\d+)\. ", line.lstrip())
                 if m is None:
                     return BlockType.PARAGRAPH
                 else:
