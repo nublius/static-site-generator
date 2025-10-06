@@ -15,10 +15,10 @@ def block_to_block_type(block):
     elif block.startswith("```") and block.endswith("```") and len(block) >= 6:
         return BlockType.CODE
     else:
-        lines = block.split("\n")
+        lines = [ln for ln in block.split("\n") if ln.strip() != ""]
         if all(line.startswith(">") for line in lines):
             return BlockType.QUOTE
-        elif all(line.startswith("- ") for line in lines):
+        elif all(line.lstrip().startswith(("- ", "* ")) for line in lines):
             return BlockType.UNORDERED_LIST
         else:
             nums = []

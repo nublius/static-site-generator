@@ -97,7 +97,7 @@ def dedent_lines(lines):
     non_empty = [ln for ln in lines if ln.strip() != ""]
     if not non_empty:
         return lines
-    min_indent = min(len(ln) - len(ln.strip(" ")) for ln in non_empty)
+    min_indent = min(len(ln) - len(ln.lstrip(" ")) for ln in non_empty)
     return [ln[min_indent:] if len(ln) >= min_indent else ln for ln in lines]
 
 def parse_code(block):
@@ -121,16 +121,16 @@ def parse_code(block):
     return "\n".join(inner) + "\n"
 
 def parse_unordered_list(block):
-    lines = block.split("\n")
-    new_lines = []
-    for line in lines:
-        if line.startswith("- "):
-            new_lines.append(line[2:])
-        elif line.startswith("-"):
-            new_lines.append(line[1:])
-        else:
-            new_lines.append(line)
-    return new_lines
+    items = []
+    for line in block.split("\n"):
+        s = line.lstrip()
+        if s.startswith("- "):
+            items.append(s[2:])
+        elif s.startswith("* "):
+            items.append(s[2:])
+        elif s.strip():
+            items.append(s)
+    return items
 
 def parse_ordered_list(block):
     lines = block.split("\n")

@@ -56,4 +56,19 @@ class TestMarkdownToHTML(unittest.TestCase):
             html,
             "<div><h1>heading 1</h1><h2>heading 2</h2><h3>heading 3</h3><h4>heading 4</h4><h5>heading 5</h5><h6>heading 6</h6></div>"
         )
+
+    def test_unordered_list(self):
+        md = """
+        # Groceries
+
+        - Milk
+        - Toilet Paper
+        """
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h1>Groceries</h1><ul><li>Milk</li><li>Toilet Paper</li></ul></div>"
+        )
     

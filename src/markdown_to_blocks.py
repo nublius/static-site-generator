@@ -1,19 +1,25 @@
+import re
+ol_re = re.compile(r"^\d+\.\s")
+def is_ul(line): return line.lstrip().startswith(("- ", "* "))
+def is_ol(line): return bool(ol_re.match(line.lstrip()))
+
 def markdown_to_blocks(text):
     blocks = []
     current = []
-    in_code = False
+    current_kind = ""
 
     def flush():
         nonlocal current
+        nonlocal current_kind
         if current:
             blocks.append("\n".join(current).strip())
             current = []
+            current_kind = ""
 
     for line in text.splitlines():
-        if in_code:
+        if current_kind == "code":
             current.append(line)
             if line.lstrip().startswith("```"):
-                in_code = False
                 flush()
             continue
 
@@ -23,7 +29,7 @@ def markdown_to_blocks(text):
 
         if line.lstrip().startswith("```"):
             flush()
-            in_code = True
+            current_kind = "code"
             current.append(line)
             continue
 
@@ -32,9 +38,27 @@ def markdown_to_blocks(text):
             blocks.append(line.strip())
             continue
 
+        if is_ul(line):
+            if current_kind != "ul":
+                flush()
+                current_kind = "ul"
+            current.append(line)
+            continue
+
+        if is_ol(line):
+            if current_kind != "ol":
+                flush()
+                current_kind = "ol"
+            current.append(line)
+            continue
+
+        if current_kind != "para":
+            flush()
+            current_kind = "para"
         current.append(line)
 
     flush()
+
     return blocks
 #    blocks = text.split("\n\n")
 #    return [b.strip() for b in blocks if b.strip()]
